@@ -1,4 +1,3 @@
-version: '3.8'
 
 services:
   oracle:
@@ -7,7 +6,7 @@ services:
     environment:
       - ORACLE_PASSWORD=admin_senha_123 # Senha do usuário system/sys
       - APP_USER=ecocoleta              # Usuário da aplicação
-      - APP_PASSWORD=ecocoleta_123      # Senha da aplicação
+      - APP_USER_PASSWORD=ecocoleta_123      # Senha da aplicação
     ports:
       - "1521:1521"
     volumes:
