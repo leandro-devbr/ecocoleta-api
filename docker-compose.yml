@@ -4,9 +4,9 @@ services:
     image: gvenzl/oracle-xe:latest
     container_name: oracle-ecocoleta
     environment:
-      - ORACLE_PASSWORD=admin_senha_123 # Senha do usuário system/sys
-      - APP_USER=ecocoleta              # Usuário da aplicação
-      - APP_USER_PASSWORD=ecocoleta_123      # Senha da aplicação
+      ORACLE_PASSWORD: ${ORACLE_PASSWORD:-admin_senha_123}
+      APP_USER: ${DB_USERNAME:-ecocoleta}
+      APP_USER_PASSWORD: ${DB_PASSWORD:-ecocoleta_123}
     ports:
       - "1521:1521"
     volumes:
@@ -16,6 +16,22 @@ services:
       interval: 10s
       timeout: 5s
       retries: 10
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ecocoleta-api
+    environment:
+      DB_URL: jdbc:oracle:thin:@//oracle:1521/XEPDB1
+      DB_USERNAME: ${DB_USERNAME:-ecocoleta}
+      DB_PASSWORD: ${DB_PASSWORD:-ecocoleta_123}
+      JWT_SECRET: ${JWT_SECRET:?Configure a variável JWT_SECRET antes de iniciar os containers}
+    ports:
+      - "8080:8080"
+    depends_on:
+      oracle:
+        condition: service_healthy
 
 volumes:
   oracle_data:

@@ -2,14 +2,14 @@ package br.com.ecocoleta.ecocoleta.models;
 
 public enum PerfilUsuario {
     ADMIN,
-    USUARIO;
+    USER;
 
 
     public String getDescricao() {
         switch (this) {
             case ADMIN:
                 return "Administrador";
-            case USUARIO:
+            case USER:
                 return "Usuário";
             default:
                 return "";
