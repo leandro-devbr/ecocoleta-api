@@ -9,9 +9,6 @@ public record DescarteRequestDTO(
         @NotNull(message = "O ID do ponto de coleta é obrigatório")
         Long pontoColetaId,
 
-        @NotNull(message = "O ID do usuário é obrigatório")
-        Long usuarioId,
-
         @NotNull(message = "A quantidade descartada é obrigatória")
         @Positive(message = "A quantidade deve ser maior que zero")
         BigDecimal quantidadeKg
