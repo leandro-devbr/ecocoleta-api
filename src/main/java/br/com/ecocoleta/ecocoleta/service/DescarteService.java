@@ -36,7 +36,7 @@ public class DescarteService {
         this.usuarioRepository = usuarioRepository;
     }
 
-    public DescarteResponseDTO registrar(DescarteRequestDTO dto) {
+    public DescarteResponseDTO registrar(DescarteRequestDTO dto, String emailUsuario) {
         if (dto.quantidadeKg().compareTo(LIMITE_DESCARTE_KG) > 0) {
             throw new RegraNegocioException(
                     "Não é permitido descartar mais de 500 Kg de uma só vez por medida de segurança ambiental.");
@@ -44,8 +44,9 @@ public class DescarteService {
 
         PontoColeta ponto = pontoRepository.findById(dto.pontoColetaId()).orElseThrow(
                 () -> new RecursoNaoEncontradoException("Ponto de coleta não encontrado: " + dto.pontoColetaId()));
-        Usuario usuario = usuarioRepository.findById(dto.usuarioId()).orElseThrow(
-                () -> new RecursoNaoEncontradoException("Usuário não encontrado: " + dto.usuarioId()));
+
+        Usuario usuario = usuarioRepository.findByEmail(emailUsuario).orElseThrow(
+                () -> new RecursoNaoEncontradoException("Usuário não encontrado."));
 
         if (ponto.getStatus() == PontoStatus.CHEIO) {
             throw new RegraNegocioException(

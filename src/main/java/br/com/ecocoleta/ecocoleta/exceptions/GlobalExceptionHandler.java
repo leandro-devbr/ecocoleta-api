@@ -9,6 +9,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -108,6 +109,14 @@ public class GlobalExceptionHandler {
         LOGGER.error("Erro inesperado ao processar {} {}", request.getMethod(), request.getRequestURI(), exception);
         return response(HttpStatus.INTERNAL_SERVER_ERROR, "Erro interno",
                 "Não foi possível processar a requisição.", request, Map.of());
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ApiErrorResponse> handleAccessDenied(
+            HttpServletRequest request
+    ) {
+        return response(HttpStatus.FORBIDDEN, "Acesso negado",
+                "Você não tem permissão para acessar este recurso.", request, Map.of());
     }
 
     private ResponseEntity<ApiErrorResponse> response(

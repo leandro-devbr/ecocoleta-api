@@ -4,6 +4,7 @@ import br.com.ecocoleta.ecocoleta.dto.DescarteRequestDTO;
 import br.com.ecocoleta.ecocoleta.dto.DescarteResponseDTO;
 import br.com.ecocoleta.ecocoleta.service.DescarteService;
 import jakarta.validation.Valid;
+import org.springframework.security.core.Authentication;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,8 +22,10 @@ public class DescarteController {
     }
 
     @PostMapping
-    public ResponseEntity<DescarteResponseDTO> registrar(@RequestBody @Valid DescarteRequestDTO dto) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(service.registrar(dto));
+    public ResponseEntity<DescarteResponseDTO> registrar(@RequestBody @Valid DescarteRequestDTO dto,
+                                                         Authentication authentication) {
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(service.registrar(dto, authentication.getName()));
     }
 
     @GetMapping("/ponto/{pontoId}")
